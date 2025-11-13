@@ -1,0 +1,11 @@
+{
+ "NUM_LOG_FILES": 10,
+ "algo_meta_rows_scarce_factor": 10,
+ "der_ignore_first_n_samples": 100,
+ "json_file": "C:\\Users\\CarmelS\\PycharmProjects\\TemporalAnalysis\\data_analysis.json",
+ "json_file_bak": "C:\\Users\\CarmelS\\PycharmProjects\\TemporalAnalysis\\data_analysis.json.prev",
+ "lpf_cutoff": 100,
+ "lpf_fs": 2000,
+ "lpf_order": 5,
+ "pseudo_sigma_factor": 2.5
+}
