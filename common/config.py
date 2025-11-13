@@ -31,7 +31,14 @@ class Config(metaclass=Singleton):
     Container for configuration, loaded from JSON
     """
 
+    PRINT_TO_CONSOLE = False
     NUM_LOG_FILES = 10
+    LOGGING_LEVEL = 20
+    # DEBUG = 10
+    # INFO = 20
+    # WARNING = 30
+    # ERROR = 40
+    # CRITICAL = 50
 
     def __init__(self, filename: str = HOME_FOLDER + os.path.sep + "data_analysis.json"):
         """
