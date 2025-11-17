@@ -1,32 +1,14 @@
-import inspect
-import json
 import os
-import platform
-import shutil
+import typing
 
-
-# HOME_FOLDER = 'c:\\feed_watcher' #  if platform.system() == 'Windows' else '/path/to/folder'
-from threading import Lock
+from common.config_base import ConfigBase
+from common.data_types import DataLoadType, DataSourcePointer
 
 HOME_FOLDER = os.getcwd()
 DATE_TIME_STRING = "%Y-%m-%dT%H:%M:%S.%f"
 
 
-class Singleton(type):
-    _instances = {}
-    singleton_lock = Lock()
-
-    def __call__(cls, *args, **kwargs):
-        cls.singleton_lock.acquire()
-        try:
-            if cls not in cls._instances:
-                cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-            return cls._instances[cls]
-        finally:
-            cls.singleton_lock.release()
-
-
-class Config(metaclass=Singleton):
+class Config(ConfigBase):
     """
     Container for configuration, loaded from JSON
     """
@@ -40,49 +22,29 @@ class Config(metaclass=Singleton):
     # ERROR = 40
     # CRITICAL = 50
 
+    # DB related
+    DATA_LOADING_METHOD = DataLoadType.Local
+    DATA_SOURCE_POINTER = DataSourcePointer(
+        {
+            "ip": "",
+            "user": "",
+            "password": ""
+        }
+    )
+
     def __init__(self, filename: str = HOME_FOLDER + os.path.sep + "data_analysis.json"):
-        """
-        Load the configuration from json or use the defaults
-        :param filename: config file to use.
-        """
-        self.json_file = filename
-        self.json_file_bak = filename + ".prev"
-        if os.path.exists(self.json_file):
-            try:
-                self.reload()
-            except ValueError:
-                pass
-        else:
-            directory = os.path.dirname(self.json_file)
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            with open(self.json_file, "w") as fp:
-                json.dump(self.json(), fp, indent=True)
-            os.chmod(self.json_file, 0o644)
+        super().__init__(filename)
+        self.__construct_special_types()
 
-    def json(self):
-        attributes = inspect.getmembers(self, lambda m: not (inspect.isroutine(m)))
-        ret = {}
-        for attr in attributes:
-            if not (attr[0].startswith('__')) and attr[1] is not None:
-                ret[attr[0]] = attr[1]
-        # ret = {attr[0]: attr[1] for attr in attributes if not (attr[0].startswith('__')) and attr[1] is not None}
-        return ret
-
-    def update(self, conf=None):
-        if conf is not None:
-            for (k, v) in list(conf.items()):
-                setattr(self, k, v)
-
-        if os.path.exists(self.json_file):
-            shutil.copyfile(self.json_file, self.json_file_bak)
-
-        with open(self.json_file, "w") as fp:
-            json.dump(self.json(), fp, indent=True)
-        os.chmod(self.json_file, 0o644)
-
-        self.reload()
+    def update(self, conf: typing.Dict = None, persist: bool = False, only_field: str = None):
+        super().update(conf, persist)
+        self.__construct_special_types()
 
     def reload(self):
-        conf = json.load(open(self.json_file, "r"))
-        self.__dict__.update(conf)
+        super().reload()
+        self.__construct_special_types()
+
+    def __construct_special_types(self):
+        if isinstance(self.DATA_SOURCE_POINTER, typing.Dict):
+            self.DATA_SOURCE_POINTER = DataSourcePointer(self.DATA_SOURCE_POINTER)
+        self.DATA_LOADING_METHOD = DataLoadType(self.DATA_LOADING_METHOD)
