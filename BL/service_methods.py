@@ -48,6 +48,8 @@ def get_labels(df: pd.DataFrame) -> List[str]:
 
 # @st.cache(hash_funcs={pd.DataFrame: hash_reference})
 def get_channels(df: pd.DataFrame) -> List[str]:
+    return ['Accelerometer1RMS', 'Accelerometer2RMS', 'Current', 'Pressure', 'Temperature',
+            'Thermocouple', 'Voltage', 'Volume Flow RateRMS', ]
     return list(df.columns[1: -1])
 
 
@@ -82,7 +84,7 @@ def prepare_for_distribution_per_channel(df: pd.DataFrame) -> pd.DataFrame:
 def prepare_for_channel_correlation(df: pd.DataFrame, channels: List[str]) -> pd.DataFrame:
     columns = ['time'] + channels + ['label']
     labels = df[df.columns[-1]]
-    times = df[df.columns[0]]
+    times = df['datetime']
     result = pd.DataFrame(columns=columns)
     result['time'] = times
     result['label'] = labels
