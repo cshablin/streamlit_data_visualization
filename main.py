@@ -1,3 +1,4 @@
+import traceback
 import streamlit as st
 from PIL import Image
 
@@ -65,11 +66,18 @@ tabs_html = f"""
 st.markdown(tabs_html, unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
-if active_tab == "Distribution":
-    distribution_page(df)
-elif active_tab == "Correlation":
-    corr_page(df)
-elif active_tab == "Missing data":
-    missing_data_analysis(df)
-else:
-    st.error("Something is wrong.")
+try:
+    if active_tab == "Distribution":
+        distribution_page(df)
+    elif active_tab == "Correlation":
+        corr_page(df)
+    elif active_tab == "Missing data":
+        missing_data_analysis(df)
+    else:
+        st.error("Something is wrong.")
+except Exception as e:
+    # Get the formatted stack trace as a string
+    stack_trace = traceback.format_exc()
+    logger.error(f"Error details:\n{e}\n{stack_trace}")
+    logger.error(e)
+    raise e
