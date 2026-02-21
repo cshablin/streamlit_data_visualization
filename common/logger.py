@@ -1,13 +1,11 @@
 import logging
-from abc import ABC, abstractmethod
 
 from common.config import Config
 from common.init_app import log_name
 
 
-class LoggerBase(ABC):
+class LoggerBase:
 
-    @abstractmethod
     def __init__(self, name: str, conf: Config):
         self._logger = logging.getLogger(name)
         self.name = self._logger.name
