@@ -50,7 +50,9 @@ class LoggerBase:
 
 
 class Logger(LoggerBase):
-    def __init__(self, name: str = log_name, conf: Config = Config()):
+    def __init__(self, name: str = log_name, conf: Config = None):
+        if conf is None:
+            conf = Config()
         super(Logger, self).__init__(name, conf)
 
     # def __int__(self, name=log_name):
