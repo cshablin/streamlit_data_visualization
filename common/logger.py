@@ -44,7 +44,8 @@ class LoggerBase:
 
     def flush(self):
         self.info("flushing logs")
-        [h.flush() for h in self._logger.handlers]
+        for h in self._logger.handlers:
+            h.flush()
         self.info("done flushing logs")
 
 
