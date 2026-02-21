@@ -12,7 +12,7 @@ class LoggerBase(ABC):
         self._logger = logging.getLogger(name)
         self.name = self._logger.name
         self.config = conf
-        self._logger.setLevel(level=conf.NUM_LOG_FILES)
+        self._logger.setLevel(level=conf.LOGGING_LEVEL)
 
     def fatal(self, msg, *args):
         self._logger.fatal(msg.format(*args))
