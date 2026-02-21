@@ -13,29 +13,34 @@ class LoggerBase:
         self._logger.setLevel(level=conf.LOGGING_LEVEL)
 
     def fatal(self, msg, *args):
-        self._logger.fatal(msg.format(*args))
+        formatted = msg.format(*args)
+        self._logger.fatal(formatted)
         if self.config.PRINT_TO_CONSOLE:
-            print(msg.format(*args))
+            print(formatted)
 
     def info(self, msg, *args):
-        self._logger.info(msg.format(*args))
+        formatted = msg.format(*args)
+        self._logger.info(formatted)
         if self.config.PRINT_TO_CONSOLE:
-            print(msg.format(*args))
+            print(formatted)
 
     def error(self, msg, *args):
-        self._logger.error(msg.format(*args))
+        formatted = msg.format(*args)
+        self._logger.error(formatted)
         if self.config.PRINT_TO_CONSOLE:
-            print(msg.format(*args))
+            print(formatted)
 
     def warn(self, msg, *args):
-        self._logger.warning(msg.format(*args))
+        formatted = msg.format(*args)
+        self._logger.warning(formatted)
         if self.config.PRINT_TO_CONSOLE:
-            print(msg.format(*args))
+            print(formatted)
 
     def debug(self, msg, *args):
-        self._logger.debug(msg.format(*args))
+        formatted = msg.format(*args)
+        self._logger.debug(formatted)
         if self.config.PRINT_TO_CONSOLE:
-            print(msg.format(*args))
+            print(formatted)
 
     def flush(self):
         self.info("flushing logs")
