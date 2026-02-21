@@ -55,6 +55,3 @@ class Logger(LoggerBase):
             conf = Config()
         super(Logger, self).__init__(name, conf)
 
-    # def __int__(self, name=log_name):
-    #     conf = Config()
-    #     super(Logger, self).__init__(name, conf)
